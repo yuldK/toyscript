@@ -11,3 +11,10 @@ add_sources(${target}
 	"Header Files"
 	"common.h"
 )
+
+add_sources(${target}
+	"script"
+	"script/script.cpp"
+	"script/script.h"
+	"script/tokenizer.h"
+)

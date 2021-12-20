@@ -1,0 +1,12 @@
+
+[sample tag]
+	1 0 -10 +2.5
+	`hello!`
+	`world // not match
+	a`
+	4 // 5 // 6
+	/*
+	5
+	*/
+[ab1 2 )]
+
