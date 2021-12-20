@@ -1,3 +1,6 @@
 [submodule "code/ycl"]
 	path = code/ycl
 	url = https://github.com/yuldK/common
+[submodule "code/fmt"]
+	path = code/fmt
+	url = https://github.com/fmtlib/fmt.git

@@ -18,3 +18,5 @@ add_sources(${target}
 	"script/script.h"
 	"script/tokenizer.h"
 )
+
+add_and_link_dependency(${target} fmt::fmt)

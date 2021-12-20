@@ -12,6 +12,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <fmt/include/fmt/format.h>
+
 struct token
 {
 public:
@@ -219,7 +221,7 @@ protected:
 		return false;
 	}
 
-	bool check(char c) 
+	bool check(char c)
 	{
 		return ('0' <= c && c <= '9');
 	}
@@ -341,7 +343,7 @@ protected:
 			&& ('0' <= c && c <= '9') == false
 			&& ('a' <= c && c <= 'z') == false
 			)
-			throw std::invalid_argument{ "invalid tag string!" };
+			throw std::invalid_argument{ fmt::format("invalid tag string: `{0}`", std::string_view{ buffer_ + c }) };
 
 		buffer_.push_back(c);
 		return true;
@@ -376,19 +378,22 @@ private:
 			auto err_msg = std::string{ "can not read script! invalid path: " } + path_.string();
 			throw std::exception{ err_msg.c_str() };
 		}
+		else
+		{
+			// get script data
+			size_t total_size = fs::file_size(path_);
+			optimize_plain_.resize(total_size + 1);
+			file.read(optimize_plain_.data(), total_size);
+			optimize_plain_[total_size] = '\0';
+			file.close();
 
-		// get script data
-		size_t total_size = fs::file_size(path_);
-		std::string buffer;
-		buffer.resize(total_size + 1);
-		file.read(buffer.data(), total_size);
-		buffer[total_size] = '\0';
-		file.close();
+			namespace rc = std::regex_constants;
 
-		namespace rc = std::regex_constants;
+			optimize_plain_ = std::regex_replace(optimize_plain_, std::regex{ "//.*" }, "", rc::match_any);
+			optimize_plain_ = std::regex_replace(optimize_plain_, std::regex{ "/\\*(.|\r|\n)*\\*/" }, "", rc::match_any);
+		}
 
-		buffer = std::regex_replace(buffer, std::regex{ "//.*" }, "", rc::match_any);
-		buffer = std::regex_replace(buffer, std::regex{ "/\\*(.|\r|\n)*\\*/" }, "", rc::match_any);
+
 		token_parser_number parser_number{ tokens_, string_manager_ };
 		token_parser_string parser_string{ tokens_, string_manager_ };
 		token_parser_tag parser_tag{ tokens_, string_manager_ };
@@ -397,7 +402,7 @@ private:
 
 		try
 		{
-			for (const auto& c : buffer)
+			for (const auto& c : optimize_plain_)
 			{
 				if (current_parser)
 				{
@@ -429,13 +434,13 @@ private:
 				if (c == '\0' || c == ' ' || c == '\t' || c == '\r' || c == '\n')
 					continue;
 
-				throw std::invalid_argument{ "invalid token found!"};
+				throw std::invalid_argument{ fmt::format("invalid token found `{0}`: (int){1}", c, (int)c) };
 			}
 		}
 		catch (std::exception& e)
 		{
-			error_reason += e.what();
-			error_reason.push_back('\n');
+			error_reason_ += e.what();
+			error_reason_.push_back('\n');
 		}
 	}
 
@@ -446,6 +451,6 @@ public:
 	std::vector<token> tokens_;
 	token::string_manager string_manager_;
 
-	std::string error_reason;
-
+	std::string error_reason_;
+	std::string optimize_plain_;
 };
