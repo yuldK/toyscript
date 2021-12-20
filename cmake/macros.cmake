@@ -5,8 +5,8 @@ macro (set_language_standard)
 	message(STATUS "enable languages")
 	enable_language(C)
 	enable_language(CXX)
-	# Force C++17 support requirement
-	set (CMAKE_CXX_STANDARD 17)
+	# Force latest support requirement
+	set (CMAKE_CXX_STANDARD 23)
 endmacro ()
 
 macro(set_install_prefix root)
