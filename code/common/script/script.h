@@ -1,7 +1,1 @@
 #pragma once
-
-struct script
-{
-
-
-};

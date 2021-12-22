@@ -16,6 +16,11 @@ add_sources(${target}
 	"script"
 	"script/script.cpp"
 	"script/script.h"
+)
+
+add_sources(${target}
+	"tokenizer"
+	"script/tokenizer.cpp"
 	"script/tokenizer.h"
 )
 

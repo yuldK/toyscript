@@ -10,4 +10,7 @@ set(SOLUTION_NAME "toyscript")
 
 project(${SOLUTION_NAME})
 
+set(BUILD_GMOCK OFF CACHE BOOL "do not use gmock")
+set(INSTALL_GTEST OFF CACHE BOOL "do not install gtest")
+
 add_subdirectory(code)
