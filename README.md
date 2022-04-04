@@ -19,6 +19,14 @@ tag automation system 을 구현하기 위한 작은 프로젝트입니다.
 build > cmake -G "Visual Studio 17 2022 Win64" ..
 ```
 
+## Test
+
+* cmake에 BUILD_TESTING 옵션을 추가하여 테스트 프로젝트를 추가할 수 있습니다.
+
+```
+build > cmake -DBUILD_TESTING=ON ..
+```
+
 ## Output
 
 빌드 산출물은 root/bin/$(configuration) 폴더에 생성됩니다.
